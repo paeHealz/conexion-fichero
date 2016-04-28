@@ -2,12 +2,6 @@ package com.example.camilo.bluetooth;
 
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import com.example.camilo.bluetooth.Temperatura;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -101,19 +95,17 @@ public class Gestor {
 
         peso=mPeso;
 
-        Log.e(".Gestor.peso","Peso"+peso);
 
     }
     public void fijarAltura(int maltura){
 
         altura=maltura;
-        Log.e(".Gestor","Altura"+altura);
+
     }
     public void fijarEdad(int mEdad){
 
         edad=mEdad;
 
-        Log.e(".Gestor","Edad"+edad);
     }
 
 
