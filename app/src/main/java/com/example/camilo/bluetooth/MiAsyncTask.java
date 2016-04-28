@@ -76,6 +76,8 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
             aStream = mSocket.getInputStream();
             aReader = new InputStreamReader(aStream);
             mBufferedReader = new BufferedReader(aReader);
+            Gestor ges;
+
 
             temperatura.setInformacion("Sin datos...");
             publishProgress(temperatura);
@@ -97,11 +99,13 @@ se interroga al canal de comunicación por la temperatura*/
 //donde XX es la temperatura.
                         try {
 
-                            Log.e(".java, asin","entra en segundo try para recojer datos");
+                            Log.e(".java, asin", "entra en segundo try para recojer datos");
 
                             String s[] = aString.split("");
                             temperatura.setNombreDispositivo(s[0]);
-                            temperatura.setTemperatura(s[1]);
+                            temperatura.setTemperatura(s[1] + s[2]);
+                            ges= new Gestor(temperatura);
+                            ges.Guardar();
                             publishProgress(temperatura);
                         } catch (Exception e) {
 //Si falla el formateo de los datos, no hacemos nada. Mostramos la excepción en la consola para
