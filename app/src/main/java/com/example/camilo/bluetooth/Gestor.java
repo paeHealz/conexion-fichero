@@ -3,6 +3,7 @@ package com.example.camilo.bluetooth;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.camilo.bluetooth.Temperatura;
@@ -22,11 +23,21 @@ public class Gestor {
     File sdCard, directory, file = null;
     static final int READ_BLOCK_SIZE = 100;
     Temperatura str;
+    int peso=0;
+    int edad=0;
+    int altura=0;
+    int a=0;
+    EditText et1;
 
 
     public Gestor(Temperatura info){
 
         this.str=info;
+
+    }
+    public Gestor(int i){
+
+        a=i;
 
     }
 
@@ -86,6 +97,24 @@ public class Gestor {
                 Log.e(".java cargar", "no pudo entrar al cargar!!!!!");
             }
         }
+    }
+
+    public void fijarPeso(int a){
+
+        peso=a;
+
+    }
+    public void fijarAltura(int b){
+
+        altura=b;
+    }
+    public void fijarEdad(int c){
+
+        edad=c;
+
+        Log.e(".Gestor","Edad"+edad);
+        Log.e(".Gestor","Altura"+altura);
+        Log.e(".Gestor","Peso"+peso);
     }
 
 

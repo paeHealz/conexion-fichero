@@ -103,9 +103,11 @@ se interroga al canal de comunicación por la temperatura*/
 
                             String s[] = aString.split("");
                             temperatura.setNombreDispositivo(s[0]);
-                            temperatura.setTemperatura(s[1] + s[2]);
-                            ges= new Gestor(temperatura);
-                            ges.Guardar();
+                            temperatura.setTemperatura(s[1] + s[2] + s[3] + s[4]);
+                            if(s[1]!="h"){
+                                ges= new Gestor(temperatura);
+                                ges.Guardar();
+                            }
                             publishProgress(temperatura);
                         } catch (Exception e) {
 //Si falla el formateo de los datos, no hacemos nada. Mostramos la excepción en la consola para

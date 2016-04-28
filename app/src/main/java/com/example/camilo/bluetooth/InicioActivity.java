@@ -169,29 +169,13 @@ adaptador BT del arduino, en este caso se llama HC-06
     }
 
     public void onClickGuardar(View v){
-        Temperatura temp=null;
-        String str ="prueba2";
 
-        if (Environment.getExternalStorageState().equals("mounted")){
-            sdCard = Environment.getExternalStorageDirectory();
-        try{
-            directory = new File(sdCard.getAbsolutePath()
-                    + "/PAE_PRUEBA");
-            directory.mkdirs();
-            file = new File(directory, "Pae.txt");
-            FileOutputStream fout = new FileOutputStream(file,true);
-            OutputStreamWriter osw = new OutputStreamWriter(fout);
-            osw.append(str+"\n");
-            osw.flush();
-            osw.close();
-            Toast.makeText(getBaseContext(), "Guardado", Toast.LENGTH_SHORT).show();
+        int a=edad();
+        Gestor g=new Gestor(a);
+        g.fijarAltura(a);
+        g.fijarEdad(a + 1);
+        g.fijarPeso(a + 2);
 
-            textBox.setText("");
-        }catch (IOException ex){
-            ex.printStackTrace();
-        }
-
-    }
     }
 
     public void onClickCargar(View v) {
@@ -231,6 +215,14 @@ adaptador BT del arduino, en este caso se llama HC-06
                 Log.e(".java cargar", "no pudo entrar al cargar!!!!!");
             }
         }
+    }
+
+    public int edad(){
+
+        String s= textBox.getText().toString();
+        int numero=Integer.parseInt(s);
+        return numero;
+
     }
 
 }
