@@ -174,7 +174,7 @@ adaptador BT del arduino, en este caso se llama HC-06
         Gestor g=new Gestor(a);
         g.fijarAltura(a);
         g.fijarEdad(a + 1);
-        g.fijarPeso(a + 2);
+        g.fijarPeso(10);
 
     }
 

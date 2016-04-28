@@ -23,12 +23,10 @@ public class Gestor {
     File sdCard, directory, file = null;
     static final int READ_BLOCK_SIZE = 100;
     Temperatura str;
-    int peso=0;
-    int edad=0;
-    int altura=0;
-    int a=0;
-    EditText et1;
-
+    int peso;
+    int edad;
+    int altura;
+    int h;
 
     public Gestor(Temperatura info){
 
@@ -37,7 +35,7 @@ public class Gestor {
     }
     public Gestor(int i){
 
-        a=i;
+        h=i;
 
     }
 
@@ -99,22 +97,23 @@ public class Gestor {
         }
     }
 
-    public void fijarPeso(int a){
+    public void fijarPeso(int mPeso){
 
-        peso=a;
+        peso=mPeso;
+
+        Log.e(".Gestor.peso","Peso"+peso);
 
     }
-    public void fijarAltura(int b){
+    public void fijarAltura(int maltura){
 
-        altura=b;
+        altura=maltura;
+        Log.e(".Gestor","Altura"+altura);
     }
-    public void fijarEdad(int c){
+    public void fijarEdad(int mEdad){
 
-        edad=c;
+        edad=mEdad;
 
         Log.e(".Gestor","Edad"+edad);
-        Log.e(".Gestor","Altura"+altura);
-        Log.e(".Gestor","Peso"+peso);
     }
 
 
