@@ -107,7 +107,7 @@ public class Gestor {
 
                         valor=Integer.parseInt(linea);
                         h= (h+valor)/i;
-                        HRmedio=impedancia;
+                        HRmedio=h;
 
                     }
                     i++;

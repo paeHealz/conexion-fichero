@@ -13,17 +13,16 @@ import java.io.InputStreamReader;
  */
 public class Controlador {
     Gestor gestor;
-    File sdCard, directory, file = null;
-    static final int READ_BLOCK_SIZE = 100000;
-    Temperatura str;
     double FatMass=0;
     double TotalWater=0;
     double ExtraCelular=0;
     double IntrCelular=0;
     double BodyMass=0;
-    double BioImpedance=0;
 
     public Controlador(){
+
+        gestor.leer("HeartRate.txt");
+        gestor.leer("Impedancia.txt");
 
 
     }
@@ -32,17 +31,17 @@ public class Controlador {
 
         double tbw;
 
-        tbw=0.6*((gestor.altura*gestor.altura)/BioImpedance);
+        tbw=0.6*((gestor.altura*gestor.altura)/gestor.impedanciaMedia);
 
 
-        return 0;
+        return tbw;
     }
 
     public double Hidratacion(){
        double alto= gestor.altura/100;
-        ExtraCelular=((alto*alto)/BioImpedance)+2.7;
+        ExtraCelular=((alto*alto)/gestor.impedanciaMedia)+2.7;
 
-        return 0;
+        return ExtraCelular;
     }
 
     public double FFM(){
