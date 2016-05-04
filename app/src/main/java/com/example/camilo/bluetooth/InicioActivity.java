@@ -22,9 +22,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -179,6 +181,7 @@ adaptador BT del arduino, en este caso se llama HC-06
     }
 
     public void onClickCargar(View v) {
+        int i = 0;
 
         if (Environment.getExternalStorageState().equals("mounted")) {
             sdCard = Environment.getExternalStorageDirectory();
@@ -188,20 +191,27 @@ adaptador BT del arduino, en este caso se llama HC-06
 
             try {
 
-                //FileInputStream fis = openFileInput(file.getName());
-                InputStreamReader isr = new InputStreamReader(new FileInputStream(file));
 
-                char[] inputBuffer = new char[READ_BLOCK_SIZE];
+                BufferedReader isr = new BufferedReader(new FileReader(file));
+
                 String s = "";
+                String linea;
+                String nombre="Pae.txt";
+                int valor;
+                while ((linea = isr.readLine()) != null) {
 
-                int charRead;
-                while ((charRead = isr.read(inputBuffer)) > 0) {
-                    // Convertimos los char a String
-                    String readString = String.copyValueOf(inputBuffer, 0, charRead);
-                    s += readString;
+                    {
+                        if(nombre=="Pae.txt"){
 
-                    inputBuffer = new char[READ_BLOCK_SIZE];
+                            valor=Integer.parseInt(linea);
+
+                        }
+
+
+                    }
+
                 }
+
 
                 // Establecemos en el EditText el texto que hemos leido
                 textBox.setText(s);

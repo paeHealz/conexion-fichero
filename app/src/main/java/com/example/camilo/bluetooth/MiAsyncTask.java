@@ -67,6 +67,8 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
     private boolean conectayRecibeBT(BluetoothDevice device) {
 //Abrimos la conexión con el dispositivo.
         boolean ok = true;
+        int impedancia;
+        double agua;
 
         try {
             contadorConexiones++;
@@ -92,21 +94,26 @@ se interroga al canal de comunicación por la temperatura*/
 
                     String aString = mBufferedReader.readLine();
                     if ((aString != null) && (!aString.isEmpty())) {
-//Instante de tiempo en que recuperamos un dato.
                         temperatura.setInformacion(sdf.format(new Date()));
-
-//Recibimos la información en una cadena de la forma NombreDispositivo,XX
-//donde XX es la temperatura.
                         try {
 
                             Log.e(".java, asin", "entra en segundo try para recojer datos");
 
                             String s[] = aString.split(",");
-                            temperatura.setNombreDispositivo(s[0]);
-                            temperatura.setTemperatura(s[0]+s[1]);
-                                ges= new Gestor(temperatura);
-                                ges.Guardar();
+
+                            if(s[0]=="Z" && s[1] !="") {
+
+                                temperatura.setTemperatura(s[1]);
+                                ges = new Gestor(temperatura);
+                                ges.Guardar("Impedancia.txt");
+                            }
+                            if(s[0]=="HR") {
+                                /*
+                                ges = new Gestor(temperatura);
+                                ges.Guardar("HeartRate.txt");*/
+                            }
                             publishProgress(temperatura);
+
                         } catch (Exception e) {
 //Si falla el formateo de los datos, no hacemos nada. Mostramos la excepción en la consola para
 //observar el error.
