@@ -24,6 +24,7 @@ public class Gestor {
     public int edad;
     public int altura;
     public int impedanciaMedia;
+    public int HRmedio;
     public int hr;
 
     public Gestor(Temperatura info){
@@ -38,7 +39,19 @@ public class Gestor {
     }
 
     public void Guardar(String nombre){
-      String p = str.getTemperatura();
+
+        String p;
+
+        if(nombre == "HeartRate.txt"){
+            StringBuilder sb= new StringBuilder();
+            sb.append("");
+            sb.append(hr);
+             p=sb.toString();
+
+        }
+     else
+        {  p = str.getTemperatura();}
+
 
         if (Environment.getExternalStorageState().equals("mounted")){
             sdCard = Environment.getExternalStorageDirectory();
@@ -64,6 +77,7 @@ public class Gestor {
     public void leer(String nombre) {
         int valor;
         int impedancia=0;
+        int h=hr;
         int i=1;
 
         if (Environment.getExternalStorageState().equals("mounted")) {
@@ -86,13 +100,22 @@ public class Gestor {
 
                         valor=Integer.parseInt(linea);
                         impedancia= (impedancia+valor)/i;
+                        impedanciaMedia=impedancia;
 
                     }
+                    if(nombre=="HeartRate.txt"){
+
+                        valor=Integer.parseInt(linea);
+                        h= (h+valor)/i;
+                        HRmedio=impedancia;
+
+                    }
+                    i++;
 
                 }
 
                 isr.close();
-                impedanciaMedia=impedancia;
+
             } catch (IOException ex) {
                 ex.printStackTrace();
                 Log.e(".java cargar", "no pudo entrar al cargar!!!!!");

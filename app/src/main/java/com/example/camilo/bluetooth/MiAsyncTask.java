@@ -108,9 +108,10 @@ se interroga al canal de comunicación por la temperatura*/
                                 ges.Guardar("Impedancia.txt");
                             }
                             if(s[0]=="HR") {
-                                /*
-                                ges = new Gestor(temperatura);
-                                ges.Guardar("HeartRate.txt");*/
+                                int i;
+                                i=Integer.parseInt(s[1]);
+                                ges = new Gestor(i);
+                                ges.Guardar("HeartRate.txt");
                             }
                             publishProgress(temperatura);
 
