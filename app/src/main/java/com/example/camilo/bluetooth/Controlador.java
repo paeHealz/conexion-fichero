@@ -12,28 +12,28 @@ import java.io.InputStreamReader;
  * Created by Camilo on 28/04/2016.
  */
 public class Controlador {
-    Gestor gestor;
+   private Gestor gestor;
     double FatMass=0;
     double TotalWater=0;
     double ExtraCelular=0;
     double IntrCelular=0;
     double BodyMass=0;
 
+
     public Controlador(){
 
-        gestor.leer("HeartRate.txt");
-        gestor.leer("Impedancia.txt");
-
+        gestor=new Gestor(new Temperatura());
 
     }
 
     public double TBW(){
 
         double tbw;
+       // gestor.fijarImpedancia();
 
         tbw=0.6*((gestor.altura*gestor.altura)/gestor.impedanciaMedia);
-
-
+        Log.e(".controlador","tbw"+tbw);
+        Log.e(".controlador","impedancia media"+gestor.impedanciaMedia);
         return tbw;
     }
 

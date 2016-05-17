@@ -11,10 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
-/**
- * Created by Camilo on 28/04/2016.
- */
 public class Gestor {
 
     private File sdCard, directory, file = null;
@@ -23,34 +21,46 @@ public class Gestor {
     public int peso;
     public int edad;
     public int altura;
-    public int impedanciaMedia;
-    public int HRmedio;
-    public int hr;
+    public float impedanciaMedia;
+    public int Vmedio;
+    public int mostresV;
+    public int mostresZ;
+    public long tiempo;
 
     public Gestor(Temperatura info){
 
         this.str=info;
 
     }
-    public Gestor(int i){
 
-        hr=i;
-
-    }
 
     public void Guardar(String nombre){
 
-        String p;
+        String  p = str.getTemperatura();
 
-        if(nombre == "HeartRate.txt"){
-            StringBuilder sb= new StringBuilder();
-            sb.append("");
-            sb.append(hr);
-             p=sb.toString();
+
+        if (Environment.getExternalStorageState().equals("mounted")){
+            sdCard = Environment.getExternalStorageDirectory();
+            try{
+                directory = new File(sdCard.getAbsolutePath()
+                        + "/PAE_PRUEBA");
+                directory.mkdirs();
+                file = new File(directory, nombre);
+                FileOutputStream fout = new FileOutputStream(file,true);
+                OutputStreamWriter osw = new OutputStreamWriter(fout);
+                osw.append(p+"\n");
+                osw.flush();
+                osw.close();
+
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
 
         }
-     else
-        {  p = str.getTemperatura();}
+    }
+    public void GuardarTemporal(String nombre,double x){
+
+        double  p =x;
 
 
         if (Environment.getExternalStorageState().equals("mounted")){
@@ -74,11 +84,11 @@ public class Gestor {
     }
 
 
-    public void leer(String nombre) {
-        int valor;
-        int impedancia=0;
-        int h=hr;
-        int i=1;
+
+    public ArrayList leer(String nombre) {
+        ArrayList a=new ArrayList();
+        double p;
+        int i=0;
 
         if (Environment.getExternalStorageState().equals("mounted")) {
             sdCard = Environment.getExternalStorageDirectory();
@@ -88,30 +98,18 @@ public class Gestor {
 
             try {
 
-                //FileInputStream fis = openFileInput(file.getName());
                 BufferedReader isr = new BufferedReader(new FileReader(file));
 
 
                 String linea = "";
 
                 while ((linea = isr.readLine()) != null) {
+                   linea=linea.replaceAll("\\s+","");
+                    Log.e(".Gestor","valor de linea"+linea);
+                    p=Double.parseDouble(linea);
 
-                    if(nombre=="Impedancia.txt"){
-
-                        valor=Integer.parseInt(linea);
-                        impedancia= (impedancia+valor)/i;
-                        impedanciaMedia=impedancia;
-
-                    }
-                    if(nombre=="HeartRate.txt"){
-
-                        valor=Integer.parseInt(linea);
-                        h= (h+valor)/i;
-                        HRmedio=h;
-
-                    }
+                    a.add(i,p);
                     i++;
-
                 }
 
                 isr.close();
@@ -121,6 +119,8 @@ public class Gestor {
                 Log.e(".java cargar", "no pudo entrar al cargar!!!!!");
             }
         }
+        return a;
+
     }
 
     public void fijarPeso(int mPeso){
@@ -140,5 +140,81 @@ public class Gestor {
 
     }
 
+    public double[] filter(int tipo){
+
+        //tipo =0 es HR , tipo =1 es Respiracion
+
+        ArrayList x=leer("Tension.txt");
+        int i=4;
+        if (tipo == 0){
+        double y1[]=new double[ x.size()];
+        double a1=0.017;
+        double a2=0;
+        double a3=-0.035;
+        double a4=0;
+        double a5=0.017;
+
+        double b1=1;
+        double b2=-3.8749;
+        double b3=5.6356;
+        double b4=-3.6464;
+        double b5=0.8856;
+            while(i<x.size()){
+
+                y1[i] = (double) x.get(i) *a1 + (double) x.get(i-1)*a2 +(double) x.get(i-2)*a3 + (double) x.get(i-3)*a4 + (double) x.get(i-4)*a5 - y1[i-1]*b2 - y1[i-2]*b3 - y1[i-3]*b4 - y1[i-4]*b5;
+                GuardarTemporal("camilo2.txt",y1[i]);
+                i++;
+            }
+            Log.e(".Filtro","valor de y  "+y1[2945]);
+
+            return y1;
+
+
+        }
+        else{
+
+       /* double y2[]=null;
+        double a1=5.3717/10000;
+        double a2=0;
+        double a3=-0.0011;
+        double a4=0;
+        double a5=5.3717/10000;
+
+        double b1=1;
+        double b2=-3.9333;
+        double b3=5.8022;
+        double b4=-3.8044;
+        double b5=0.9355;
+            while(x[i]>0){
+
+            y2[i] = (x[i]*b1 + x[i-1]*b2 + x[i-2]*b3 + x[i-3]*b4 + x[i-4]*b5 - y2[i-1]*a2 - y2[i-2]*a3 - y2[i-3]*a4 - y2[i-4]*a5)/a1;
+                i++;
+            }
+
+*/
+            return null;
+        }
+        /*
+        a(1)*y(n)=b(1)x(n)+b2 x(n-1);
+
+*/
+
+    }
+    public int picos(){
+
+/*
+ int t= 50s;
+
+ if ( picos >= numero){
+
+   HR.picos<RR.picos
+
+
+ }
+
+
+*/
+        return picos();
+    }
 
 }

@@ -6,7 +6,7 @@ package com.example.camilo.bluetooth;
 public class Temperatura {
 
     private String informacion = "";
-    private String temperatura = "";
+    private String temperatura="";
     private String nombreDispositivo = "";
 
     public String getInformacion() {

@@ -13,8 +13,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
 import java.util.UUID;
 
 /**
@@ -35,6 +37,8 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
     private InputStream aStream = null;
     private InputStreamReader aReader = null;
     private int contadorConexiones = 0;
+    private Gestor Impedancia,Tension;
+
     public interface MiCallback {
         void onTaskCompleted();
 
@@ -55,9 +59,11 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
 //Realizamos la conexion al disp.blueetoth. A veces la conexion falla aunque el dispositivo
 //este presente. Asi que si falla, y la tarea no ha sido cancelada, lo reintentamos.
         while (!isCancelled()) {
+
             if (!recibiendo) {
                 recibiendo = conectayRecibeBT(device);
             }
+
         }
 
         cierra();
@@ -67,8 +73,7 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
     private boolean conectayRecibeBT(BluetoothDevice device) {
 //Abrimos la conexión con el dispositivo.
         boolean ok = true;
-        int impedancia;
-        double agua;
+
 
         try {
             contadorConexiones++;
@@ -78,42 +83,78 @@ public class MiAsyncTask extends AsyncTask<BluetoothDevice, Temperatura, Void>
             aStream = mSocket.getInputStream();
             aReader = new InputStreamReader(aStream);
             mBufferedReader = new BufferedReader(aReader);
-            Gestor ges;
+            Impedancia=new Gestor(temperatura);
+            Tension = new Gestor(temperatura);
+            String nombre="Tension.txt";
+            int contadorV=1;
+            int contadorZ=1;
+
 
 
             temperatura.setInformacion("Sin datos...");
             publishProgress(temperatura);
 /*Mientras no se cancele la tarea asincrona (cuando se destruya la actividad)
 se interroga al canal de comunicación por la temperatura*/
+            Long comenzament= System.currentTimeMillis();
+            int t=0;
+
 
             while (!isCancelled()) {
 
+                if(t==0) {
+                    comenzament = System.currentTimeMillis();
+                    t=1;
+
+                }
+
                 try {
 
-                    Log.e(".java, asin","entra en primer try para recojer datos");
-
+                    Log.e(".java, asin", "entra en primer try para recojer datos");
                     String aString = mBufferedReader.readLine();
                     if ((aString != null) && (!aString.isEmpty())) {
                         temperatura.setInformacion(sdf.format(new Date()));
                         try {
 
-                            Log.e(".java, asin", "entra en segundo try para recojer datos");
+                            Log.e(".java, asin","entra en segundo try para recojer datos");
+                            String[] s = aString.split(",");
 
-                            String s[] = aString.split(",");
 
-                            if(s[0]=="Z" && s[1] !="") {
+                                if (s[0].equalsIgnoreCase("c1") && !s[1].isEmpty()) {
+                                    temperatura.setTemperatura(s[1]);
+                                    Impedancia.Guardar("calibracion1.txt");
+                                }
 
-                                temperatura.setTemperatura(s[1]);
-                                ges = new Gestor(temperatura);
-                                ges.Guardar("Impedancia.txt");
-                            }
-                            if(s[0]=="HR") {
-                                int i;
-                                i=Integer.parseInt(s[1]);
-                                ges = new Gestor(i);
-                                ges.Guardar("HeartRate.txt");
-                            }
-                            publishProgress(temperatura);
+                                if (s[0].equalsIgnoreCase("c2") && !s[1].isEmpty()) {
+
+                                    temperatura.setTemperatura(s[1]);
+                                    Impedancia.Guardar("calibracion2.txt");
+
+
+                                }
+
+                                if (s[0].equalsIgnoreCase("Z") && !s[1].isEmpty()) {
+
+                                    temperatura.setTemperatura(s[1]);
+                                    Impedancia.Guardar("Impedancia.txt");
+                                    Impedancia.mostresZ=contadorZ;
+                                    long fin=System.currentTimeMillis();
+                                    long tiempo = (fin - comenzament)/1000;
+                                    Tension.tiempo = tiempo;
+                                    contadorZ++;
+
+                                } else if (s[0].equalsIgnoreCase("V") && !s[1].isEmpty()) {
+
+                                    temperatura.setTemperatura(s[1]);
+                                    Tension.Guardar(nombre);
+                                    Tension.mostresV = contadorV;
+                                    long fin = System.currentTimeMillis();
+                                    long tiempo = (fin - comenzament)/1000;
+                                    Tension.tiempo = tiempo;
+                                    contadorV++;
+
+                                }
+
+                                publishProgress(temperatura);
 
                         } catch (Exception e) {
 //Si falla el formateo de los datos, no hacemos nada. Mostramos la excepción en la consola para
@@ -139,6 +180,7 @@ se interroga al canal de comunicación por la temperatura*/
             cierra();
 
         }
+
         return ok;
     }
 

@@ -172,67 +172,15 @@ adaptador BT del arduino, en este caso se llama HC-06
 
     public void onClickGuardar(View v){
 
-        int a=edad();
-        Gestor g=new Gestor(a);
-        g.fijarAltura(a);
-        g.fijarEdad(a + 1);
-        g.fijarPeso(10);
 
     }
 
     public void onClickCargar(View v) {
-        int i = 0;
-
-        if (Environment.getExternalStorageState().equals("mounted")) {
-            sdCard = Environment.getExternalStorageDirectory();
-            directory = new File(sdCard.getAbsolutePath() + "/PAE_PRUEBA");
-            file = new File(directory, "Pae.txt");
-          //  String p= file;
-
-            try {
 
 
-                BufferedReader isr = new BufferedReader(new FileReader(file));
-
-                String s = "";
-                String linea;
-                String nombre="Pae.txt";
-                int valor;
-                while ((linea = isr.readLine()) != null) {
-
-                    {
-                        if(nombre=="Pae.txt"){
-
-                            valor=Integer.parseInt(linea);
-
-                        }
-
-
-                    }
-
-                }
-
-
-                // Establecemos en el EditText el texto que hemos leido
-                textBox.setText(s);
-
-                // Mostramos un Toast con el proceso completado
-                Toast.makeText(getBaseContext(), "Cargado", Toast.LENGTH_SHORT).show();
-
-                isr.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                Log.e(".java cargar", "no pudo entrar al cargar!!!!!");
-            }
-        }
-    }
-
-    public int edad(){
-
-        String s= textBox.getText().toString();
-        int numero=Integer.parseInt(s);
-        return numero;
 
     }
+
+
 
 }
